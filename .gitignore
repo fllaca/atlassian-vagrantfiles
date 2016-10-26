@@ -1,0 +1,10 @@
+jira-software/jira-home/
+confluence/confluence-home/
+confluence/.vagrant/
+jira-software/.vagrant/
+bamboo/atlassian-bamboo-*.tar.gz
+jira-software/atlassian-jira-software-*.tar.gz
+jira-software/jdk-*-linux-x64.tar.gz
+confluence/jdk-*-linux-x64.tar.gz
+bamboo/jdk-*-linux-x64.tar.gz
+confluence/atlassian-confluence-*.tar.gz

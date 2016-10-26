@@ -1,0 +1,27 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.synced_folder ".", "/vagrant"
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+  end
+  # config.vm.provision :shell, path: "bootstrap.sh"
+  config.vm.define "master" do |node|
+    node.vm.hostname = "swarm-master"
+    node.vm.provision :shell, path: "install_docker.sh"
+    node.vm.provision :shell, path: "install_jdk8.sh"
+    node.vm.provision :shell, path: "install_bamboo.sh"
+    node.vm.provision :shell, path: "install_maven.sh"
+    node.vm.provision :shell, path: "start_bamboo.sh"
+    node.vm.network "private_network", ip: "10.100.199.200"
+    node.vm.network "forwarded_port", guest: 8085, host: 8085
+  end
+  
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box
+  end
+end

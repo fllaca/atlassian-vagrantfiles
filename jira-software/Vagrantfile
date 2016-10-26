@@ -1,0 +1,25 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.synced_folder ".", "/vagrant"
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+  end
+  # config.vm.provision :shell, path: "bootstrap.sh"
+  config.vm.define "jira" do |node|
+    node.vm.hostname = "jira"
+    node.vm.provision :shell, path: "install_jdk8.sh"
+    node.vm.provision :shell, path: "install_jira.sh"
+    node.vm.provision :shell, path: "start_jira.sh"
+    node.vm.network "private_network", ip: "10.200.199.200"
+    node.vm.network "forwarded_port", guest: 8080, host: 8080
+  end
+  
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box
+  end
+end
